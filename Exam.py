@@ -95,7 +95,7 @@ def guessing_main():
 
         except Exception as E: # if anything goes wrong i can troubleshoot without the program crashing
             print(E)
-            print("That's not really a word or the dev f*cked up, please try again.")
+            print("The dev f*cked up, please try again.")
 
 def success(guess_counter): # success function
 
@@ -119,23 +119,46 @@ def word_compare(final_world, user_word_guess): # word comparing function
 
         if letter in split_final_word:
             letter_matches += letter
+            print(letter_matches)
 
     if letter_matches: # if there are any matching letters this gets executed and informs the player
 
-        print(f"The letter(s) {", ".join(letter_matches)} of your guessed word '{user_word_guess}' is in the word you are guessing.")
+        print(f"The letter {", ".join(letter_matches)} of your guessed word '{user_word_guess}' is in the word you are guessing.") \
+        if len(letter_matches) < 2 else print(f"The letters {", ".join(letter_matches)} of your guessed word '{user_word_guess}' are in the word you are guessing.")
+        # i felt fancy doing this, lmk if this is ugly code - just to have better syntax when printing success message
 
-    for index, matched_letters in enumerate(letter_matches):
+    for index, matched_letters in enumerate(split_final_word):
         # this compares positions of matching letters of the guessed word and the word to be guessed
 
         if split_guessed_word_raw[index] == split_final_word[index]:
             letter_position_matches += matched_letters
+            print(letter_position_matches)
 
     if letter_position_matches: # if there are any matching letters + positions this gets executed and informs the player
         print(f"So you have done nice work! And even better: {", ".join(letter_position_matches)} is a position match.") \
             if len(letter_position_matches) < 2 else print(f"Nice! Even better: {", ".join(letter_position_matches)} are a position match.")
-        # i felt fancy doing this, lmk if this is ugly code - just to have better syntax when printing success message
+        # same thing here with better syntax
+
+def game_manager():
+
+    player_is_choosing = True # boolean to enter infinite loop until player has chosen
+    continue_input = input("Thank you for playing.")
+
+    while player_is_choosing:
+        print("Do you wish to continue playing? (y/n) ")
+        if continue_input.lower() == "y":
+            continue_input
+            player_is_choosing = False
+
+        if continue_input.lower() == "n":
+            continue_input
+            player_is_choosing = False
+
+        else:
+            print("Invalid input, please try again.")
 
 
 final_word_1 = "apple"
 welcome()
 guessing_main()
+game_manager()
