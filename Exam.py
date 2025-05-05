@@ -99,11 +99,19 @@ def word_compare(final_world, user_word_guess):
     split_final_word = list(final_world)
     split_guessed_word = list(dict.fromkeys(user_word_guess)) # this is to remove duplicate letters
     # if we dont do this the print of the letter being in the word loops that amount of times
+    letter_matches = [] # list of all matching letters
 
     for letter in split_guessed_word:
 
         if letter in split_final_word:
-            print(f"The letter {letter} of your guessed word '{user_word_guess}' is in the word you are guessing.")
+            letter_matches += letter
+
+    if letter_matches:
+
+        print(letter_matches)
+        print(", ".join(letter_matches)) # TESTING makes it pretty
+        print(f"The letter(s) {letter_matches} of your guessed word '{user_word_guess}' is in the word you are guessing.")
+
 
 
 final_word = "apple"
