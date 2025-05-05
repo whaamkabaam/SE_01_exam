@@ -22,8 +22,8 @@ X Display an error message to the user asking them to enter only exactly 5 chara
 X The player should have a total of 6 attempts to guess the word. 
   Every time they enter a word display to the user how many attempts they have left. 
   (If they didn’t type in 5 characters it should NOT count towards their attempts.)
-- Define a 5-letter word the player has to guess in the code.
-- End the game early if the player guessed the game and display a message to them that they have won.
+X Define a 5-letter word the player has to guess in the code.
+X End the game early if the player guessed the game and display a message to them that they have won.
 - If after 6 attempts, the player hasn’t guessed the correct word, display a message telling them they have lost, 
   including what would have been the correct word.'''
 
@@ -45,19 +45,38 @@ def guessing_main():
     guesses_left = 6
 
     while is_guessing:
+
         try:
             user_word_guess = (input(str("What word is your guess? "))).lower()
             if len(user_word_guess) != 5:
                 print("This word isn't 5 characters long, please try again.")
-            else:
+            elif user_word_guess == guessing_word:
+                is_guessing = False
+                guess_counter += 1
+                success(guess_counter)
+            elif len(user_word_guess) == 5:
                 print("Nice guess...")
                 guess_counter += 1
                 guesses_left -= 1
                 print(f"You have {guesses_left} guesses left.")
-                # is_guessing = False
+                if guesses_left < 1:
+                    is_guessing = False
+                    player_sucks()
+            else:
+                print("You reached unknown land. How did you get here?")
+
         except Exception as E:
             print(E)
             print("That's not really a word or the dev f*cked up, please try again.")
+
+def success(guess_counter):
+
+    print("OMG! You guessed first try. So legendary.") if guess_counter < 2 else print(f"Success! You guessed {guessing_word} in {guess_counter} attempts.")
+
+def player_sucks():
+
+    print("whomp whomp, you lost.")
+    print(f"The correct word would have been {guessing_word}.")
 
 guessing_word = "apple"
 guessing_main()
