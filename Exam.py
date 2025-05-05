@@ -8,7 +8,6 @@ The repository must include:
 how to execute the program code (this may be, for example, a Python file, web page, or executable binary)
 - A git commit history with more than a single commit documenting your work progress
 '''
-from turtle import Terminator
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Task 1)
@@ -24,19 +23,35 @@ X The player should have a total of 6 attempts to guess the word.
   (If they didn’t type in 5 characters it should NOT count towards their attempts.)
 X Define a 5-letter word the player has to guess in the code.
 X End the game early if the player guessed the game and display a message to them that they have won.
-- If after 6 attempts, the player hasn’t guessed the correct word, display a message telling them they have lost, 
+X If after 6 attempts, the player hasn’t guessed the correct word, display a message telling them they have lost, 
   including what would have been the correct word.'''
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Task 2)
+'''Now, it’s time to implement the two hints.
+Complete one hint at a time and try not to work on too many things at once.
+
+- After every attempt (and only if the user typed in a 5-letter word),
+  compare each letter the player typed in with the letters from the correct solution.
+  Then, display a hint to the player telling them which of the letters are in the word.
+  That’s the first hint.
+- Ensure that it doesn’t matter whether the user typed in lowercase or uppercase letters.
+- For the second hint, compare the position of the letters the player entered with the position
+  of the letters in the correct word.
+  Display to the user the numbers of the positions that contain the correct letters.
+- Ensure to account for the situation that in either of the two hints there could be no matching letters
+  or no correct positions. In that case, tell that to the user, e.g., by displaying the word “none.” (see example)'''
 
 def welcome():
 
     print('''Hi! Welcome to Wordle, your python nightmare of a game.
-            To play, please just type your guess for the five letter word.''')
+    To play, please just type your guess for the five letter word.''')
     '''player_ready = input("You ready? (y/n) ").lower()
     if player_ready == "y":
         print("Let's go!")
     elif player_ready == "n":
         print("hE wAsN't ReAdY.\nProgram terminated.")
-        TODO how to termiante?'''
+        TODO how to termiante? // UPDATE: imported something random but didnt work'''
 
 def guessing_main():
 
@@ -50,7 +65,7 @@ def guessing_main():
             user_word_guess = (input(str("What word is your guess? "))).lower()
             if len(user_word_guess) != 5:
                 print("This word isn't 5 characters long, please try again.")
-            elif user_word_guess == guessing_word:
+            elif user_word_guess == final_word:
                 is_guessing = False
                 guess_counter += 1
                 success(guess_counter)
@@ -59,6 +74,7 @@ def guessing_main():
                 guess_counter += 1
                 guesses_left -= 1
                 print(f"You have {guesses_left} guesses left.")
+                word_compare(final_word, user_word_guess)
                 if guesses_left < 1:
                     is_guessing = False
                     player_sucks()
@@ -71,12 +87,25 @@ def guessing_main():
 
 def success(guess_counter):
 
-    print("OMG! You guessed first try. So legendary.") if guess_counter < 2 else print(f"Success! You guessed {guessing_word} in {guess_counter} attempts.")
+    print("OMG! You guessed first try. So legendary.") if guess_counter < 2 else print(f"Success! You guessed {final_word} in {guess_counter} attempts.")
 
 def player_sucks():
 
     print("whomp whomp, you lost.")
-    print(f"The correct word would have been {guessing_word}.")
+    print(f"The correct word would have been {final_word}.")
 
-guessing_word = "apple"
+def word_compare(final_world, user_word_guess):
+
+    split_final_word = list(final_world)
+    split_guessed_word = list(dict.fromkeys(user_word_guess)) # this is to remove duplicate letters
+    # if we dont do this the print of the letter being in the word loops that amount of times
+
+    for letter in split_guessed_word:
+
+        if letter in split_final_word:
+            print(f"The letter {letter} of your guessed word '{user_word_guess}' is in the word you are guessing.")
+
+
+final_word = "apple"
+welcome()
 guessing_main()
