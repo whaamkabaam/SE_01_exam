@@ -31,16 +31,17 @@ X If after 6 attempts, the player hasn’t guessed the correct word, display a m
 '''Now, it’s time to implement the two hints.
 Complete one hint at a time and try not to work on too many things at once.
 
-- After every attempt (and only if the user typed in a 5-letter word),
+X After every attempt (and only if the user typed in a 5-letter word),
   compare each letter the player typed in with the letters from the correct solution.
   Then, display a hint to the player telling them which of the letters are in the word.
   That’s the first hint.
-- Ensure that it doesn’t matter whether the user typed in lowercase or uppercase letters.
-- For the second hint, compare the position of the letters the player entered with the position
+X Ensure that it doesn’t matter whether the user typed in lowercase or uppercase letters.
+X For the second hint, compare the position of the letters the player entered with the position
   of the letters in the correct word.
   Display to the user the numbers of the positions that contain the correct letters.
-- Ensure to account for the situation that in either of the two hints there could be no matching letters
-  or no correct positions. In that case, tell that to the user, e.g., by displaying the word “none.” (see example)'''
+X Ensure to account for the situation that in either of the two hints there could be no matching letters
+  or no correct positions. In that case, tell that to the user, e.g., by displaying the word “none.” (see example)
+  --> Prof said current logic is fine, it only shows info when there is a positive guess'''
 
 def welcome():
 
@@ -97,9 +98,11 @@ def player_sucks():
 def word_compare(final_world, user_word_guess):
 
     split_final_word = list(final_world)
+    split_guessed_word_raw = list(user_word_guess)
     split_guessed_word = list(dict.fromkeys(user_word_guess)) # this is to remove duplicate letters
     # if we dont do this the print of the letter being in the word loops that amount of times
     letter_matches = [] # list of all matching letters
+    letter_position_matches = []
 
     for letter in split_guessed_word:
 
@@ -108,9 +111,16 @@ def word_compare(final_world, user_word_guess):
 
     if letter_matches:
 
-        print(letter_matches)
-        print(", ".join(letter_matches)) # TESTING makes it pretty
-        print(f"The letter(s) {letter_matches} of your guessed word '{user_word_guess}' is in the word you are guessing.")
+        print(f"The letter(s) {", ".join(letter_matches)} of your guessed word '{user_word_guess}' is in the word you are guessing.")
+
+    for index, matched_letters in enumerate(letter_matches): # iterates with index
+
+        if split_guessed_word_raw[index] == split_final_word[index]:
+            letter_position_matches += matched_letters
+
+    if letter_position_matches:
+        print(f"So you have done nice work! And even better: {", ".join(letter_position_matches)} is a position match.") \
+            if len(letter_position_matches) < 2 else print(f"Nice! Even better: {", ".join(letter_position_matches)} are a position match.")
 
 
 
