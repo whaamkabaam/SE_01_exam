@@ -65,6 +65,33 @@ def welcome():
         print("hE wAsN't ReAdY.\nProgram terminated.")
         TODO how to termiante? // UPDATE: imported something random but didnt work'''
 
+def game_manager():
+
+    player_is_choosing = True # boolean to enter infinite loop until player has chosen
+    continue_input = input("Thank you for playing.")
+
+    while player_is_choosing:
+        print("Do you wish to continue playing? (y/n) ")
+        if continue_input.lower() == "y":
+            continue_input
+            player_is_choosing = False
+
+        if continue_input.lower() == "n":
+            continue_input
+            player_is_choosing = False
+
+        else:
+            print("Invalid input, please try again.")
+
+def success(guess_counter): # success function
+
+    print("OMG! You guessed first try. So legendary.") if guess_counter < 2 else print(f"Success! You guessed {final_word_1} in {guess_counter} attempts.")
+
+def player_sucks(): # loss function
+
+    print("whomp whomp, you lost.")
+    print(f"The correct word would have been {final_word_1}.")
+
 def guessing_main():
 
     is_guessing = True # condition to enter infinite loop until player wins or runs out of guesses
@@ -96,15 +123,6 @@ def guessing_main():
         except Exception as E: # if anything goes wrong i can troubleshoot without the program crashing
             print(E)
             print("The dev f*cked up, please try again.")
-
-def success(guess_counter): # success function
-
-    print("OMG! You guessed first try. So legendary.") if guess_counter < 2 else print(f"Success! You guessed {final_word_1} in {guess_counter} attempts.")
-
-def player_sucks(): # loss function
-
-    print("whomp whomp, you lost.")
-    print(f"The correct word would have been {final_word_1}.")
 
 def word_compare(final_world, user_word_guess): # word comparing function
 
@@ -138,24 +156,6 @@ def word_compare(final_world, user_word_guess): # word comparing function
         print(f"So you have done nice work! And even better: {", ".join(letter_position_matches)} is a position match.") \
             if len(letter_position_matches) < 2 else print(f"Nice! Even better: {", ".join(letter_position_matches)} are a position match.")
         # same thing here with better syntax
-
-def game_manager():
-
-    player_is_choosing = True # boolean to enter infinite loop until player has chosen
-    continue_input = input("Thank you for playing.")
-
-    while player_is_choosing:
-        print("Do you wish to continue playing? (y/n) ")
-        if continue_input.lower() == "y":
-            continue_input
-            player_is_choosing = False
-
-        if continue_input.lower() == "n":
-            continue_input
-            player_is_choosing = False
-
-        else:
-            print("Invalid input, please try again.")
 
 
 final_word_1 = "apple"
