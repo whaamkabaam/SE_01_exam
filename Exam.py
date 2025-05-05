@@ -48,22 +48,17 @@ X Ensure to account for the situation that in either of the two hints there coul
 # Task 3)
 '''Your last task is to polish the game and allow for it to be played multiple times.
 
-- After the player has either lost or won, ask the player if they wish to play again. Exit the game if they don’t.
-- If the player does want to play again, start a new round with a new word.
+X After the player has either lost or won, ask the player if they wish to play again. Exit the game if they don’t.
+X If the player does want to play again, start a new round with a new word.
   Ensure that the next round is played with a different word than before.
-- Allow the player to play at least 3 games with different words.
-- Allow the player to exit the game any time - e.g., by entering the word ‘exit’.'''
+X Allow the player to play at least 3 games with different words.
+X Allow the player to exit the game any time - e.g., by entering the word ‘exit’.'''
 
 def welcome():
 
     print('''Hi! Welcome to Wordle, your python nightmare of a game.
-    To play, please just type your guess for the five letter word.''')
-    '''player_ready = input("You ready? (y/n) ").lower()
-    if player_ready == "y":
-        print("Let's go!")
-    elif player_ready == "n":
-        print("hE wAsN't ReAdY.\nProgram terminated.")
-        TODO how to termiante? // UPDATE: imported something random but didnt work'''
+    To play, please just type your guess for the five letter word.
+        If you want to stop playing at any time, just type "exit"!''')
 
 def game_manager(round_counter): # manages if the player wants to play another round
 
@@ -128,21 +123,30 @@ def guessing_main(word_final, round_counter):
     while is_guessing:
         try:
             user_word_guess = (input(str("What word is your guess? "))).lower() # makes sure to disregard caps
+
+            if user_word_guess == "exit": #exit game
+                print("Thank you for playing - exiting code now.")
+                exit()
+
             if len(user_word_guess) != 5: # invalid input checker
                 print("This word isn't 5 characters long, please try again.")
+
             elif user_word_guess == to_be_guessed_word: # correct guess
                 is_guessing = False
                 guess_counter += 1
                 success(guess_counter, to_be_guessed_word, round_counter) # calls success function
+
             elif len(user_word_guess) == 5: # correct input but invalid guess
                 print("Nice guess...")
                 guess_counter += 1
                 guesses_left -= 1
                 print(f"You have {guesses_left} guesses left.")
                 word_compare(to_be_guessed_word, user_word_guess) # calls comparing function
+
                 if guesses_left < 1: # is called when player has put correct input but has run out of guesses
                     is_guessing = False
                     player_sucks(to_be_guessed_word) # legendarily named loosing function is called
+
             else:
                 print("You reached unknown land. How did you get here?") # honestly no clue how anyone would end up here
 
@@ -159,6 +163,7 @@ def word_compare(to_be_guessed_word, user_word_guess): # word comparing function
     letter_matches = [] # list of all matching letters
     letter_position_matches = [] # list of matching letters that also match position
     user_wrong = True
+    position_index = []
 
     for letter in split_guessed_word: # iterate and build the list of matching letters
 
@@ -177,10 +182,11 @@ def word_compare(to_be_guessed_word, user_word_guess): # word comparing function
 
         if split_guessed_word_raw[index] == split_final_word[index]:
             letter_position_matches += matched_letters
+            position_index.append(index+1) # index +1 so its easier to understand for the end user since index starts at 0
 
     if letter_position_matches: # if there are any matching letters + positions this gets executed and informs the player
-        print(f"So you're getting there! And even better: {", ".join(letter_position_matches)} is a position match.") \
-            if len(letter_position_matches) < 2 else print(f"Even better: {", ".join(letter_position_matches)} are a position match.")
+        print(f"So you're getting there! And even better: {", ".join(letter_position_matches)} is a position match at {", ".join(str(item) for item in position_index)}.") \
+            if len(letter_position_matches) < 2 else print(f"Even better: {", ".join(letter_position_matches)} are a position match at {", ".join(str(item) for item in position_index)}.")
         # same thing here with better syntax
         user_wrong = False # makes sure to not call the bad message saying that the user didnt guess anything
 
