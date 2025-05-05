@@ -54,8 +54,6 @@ X Ensure to account for the situation that in either of the two hints there coul
 - Allow the player to play at least 3 games with different words.
 - Allow the player to exit the game any time - e.g., by entering the word ‘exit’.'''
 
-import os
-
 def welcome():
 
     print('''Hi! Welcome to Wordle, your python nightmare of a game.
@@ -70,18 +68,20 @@ def welcome():
 def game_manager(round_counter): # manages if the player wants to play another round
 
     player_is_choosing = True # boolean to enter infinite loop until player has chosen
-    round_counter += 1
     word_final = ""
 
     # declaring which word will be used to play with / to be guessed
 
     while player_is_choosing:
 
+        if round_counter == 0:
+            round_counter += 1
+
         if round_counter == 1:
             word_final = "apple"
-            guessing_main(word_final)
+            guessing_main(word_final, round_counter)
 
-        if round_counter == 2:
+        elif round_counter == 2:
             word_final = "chair"
 
         elif round_counter == 3:
@@ -95,28 +95,30 @@ def game_manager(round_counter): # manages if the player wants to play another r
         continue_input = input("Do you wish to continue playing? (y/n) ")
         if continue_input.lower() == "y":
             player_is_choosing = False
-            guessing_main(word_final)
+            guessing_main(word_final, round_counter)
 
         elif continue_input.lower() == "n":
             player_is_choosing = False
             print("Still, thank you for playing.")
+            exit()
 
         else:
             print("Invalid input, DWDAWDplease try again.")
 
     return round_counter
 
-def success(guess_counter, to_be_guessed_word): # success function
+def success(guess_counter, to_be_guessed_word, round_counter): # success function
 
     print("OMG! You guessed first try. So legendary.") if guess_counter < 2 else print(f"Success! You guessed {to_be_guessed_word} in {guess_counter} attempts.")
-    game_manager()
+    round_counter += 1
+    game_manager(round_counter)
 
 def player_sucks(to_be_guessed_word): # loss function
 
     print("whomp whomp, you lost.")
     print(f"The correct word would have been {to_be_guessed_word}.")
 
-def guessing_main(word_final):
+def guessing_main(word_final, round_counter):
 
     to_be_guessed_word = word_final
     is_guessing = True # condition to enter infinite loop until player wins or runs out of guesses
@@ -131,7 +133,7 @@ def guessing_main(word_final):
             elif user_word_guess == to_be_guessed_word: # correct guess
                 is_guessing = False
                 guess_counter += 1
-                success(guess_counter, to_be_guessed_word) # calls success function
+                success(guess_counter, to_be_guessed_word, round_counter) # calls success function
             elif len(user_word_guess) == 5: # correct input but invalid guess
                 print("Nice guess...")
                 guess_counter += 1
@@ -156,6 +158,7 @@ def word_compare(to_be_guessed_word, user_word_guess): # word comparing function
     # if we dont do this the print of the letter being in the word loops that amount of times
     letter_matches = [] # list of all matching letters
     letter_position_matches = [] # list of matching letters that also match position
+    user_wrong = True
 
     for letter in split_guessed_word: # iterate and build the list of matching letters
 
@@ -167,6 +170,7 @@ def word_compare(to_be_guessed_word, user_word_guess): # word comparing function
         print(f"The letter {", ".join(letter_matches)} of your guessed word '{user_word_guess}' is in the word you are guessing.") \
         if len(letter_matches) < 2 else print(f"The letters {", ".join(letter_matches)} of your guessed word '{user_word_guess}' are in the word you are guessing.")
         # i felt fancy doing this, lmk if this is ugly code - just to have better syntax when printing success message
+        user_wrong = False # makes sure to not call the bad message saying that the user didnt guess anything
 
     for index, matched_letters in enumerate(split_final_word):
         # this compares positions of matching letters of the guessed word and the word to be guessed
@@ -178,8 +182,12 @@ def word_compare(to_be_guessed_word, user_word_guess): # word comparing function
         print(f"So you're getting there! And even better: {", ".join(letter_position_matches)} is a position match.") \
             if len(letter_position_matches) < 2 else print(f"Even better: {", ".join(letter_position_matches)} are a position match.")
         # same thing here with better syntax
+        user_wrong = False # makes sure to not call the bad message saying that the user didnt guess anything
+
+    if user_wrong:
+        print("However, it wasn't such a nice guess after all. \nYou didn't even guess a single letter.")
 
 
 welcome()
-round_counter = 0
-game_manager(round_counter)
+round_counter_starter = 0 # starting round counter
+game_manager(round_counter_starter)
