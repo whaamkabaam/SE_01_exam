@@ -38,7 +38,7 @@ def welcome():
         print("hE wAsN't ReAdY.\nProgram terminated.")
         TODO how to termiante?'''
 
-def user_input():
+def guessing_main():
 
     is_guessing = True
     guess_counter = 0
@@ -50,11 +50,11 @@ def user_input():
                 print("This word isn't 5 characters long, please try again.")
             else:
                 print("Nice guess...")
-                guess_counter = + 1
+                guess_counter += 1
                 print(guess_counter)
                 # is_guessing = False
         except Exception as E:
             print(E)
             print("That's not really a word, please try again.")
 
-user_input()
+guessing_main()
